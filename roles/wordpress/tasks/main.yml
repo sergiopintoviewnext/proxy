@@ -1,0 +1,60 @@
+---
+
+- name: Incluir variables cifradas con vault
+  ansible.builtin.include_vars:
+    file: vault.yml
+
+
+- name: Descargar, descomprimir Wordpress
+  ansible.builtin.unarchive:
+    src: "{{ version_wordpress }}"
+    dest: /var/www/html/
+    remote_src: true
+    mode: '0775'
+    owner: "{{ grupo_apache }}"
+    group: "{{ grupo_apache }}"
+
+
+- name: Comprobar si existe el fichero wp-config.php
+  ansible.builtin.stat:
+    path: /var/www/html/wordpress/wp-config.php
+  register: fichero_config
+
+
+- name: Comprobar si existe el fichero wp-config-sample.php
+  ansible.builtin.stat:
+    path: /var/www/html/wordpress/wp-config-sample.php
+  register: fichero_ejemplo
+  when: not fichero_config.stat.exists
+
+
+- name: Crear fichero de configuracion utilizando el fichero de ejemplo
+  ansible.builtin.copy:
+    src: /var/www/html/wordpress/wp-config-sample.php
+    dest: /var/www/html/wordpress/wp-config.php
+    mode: '0775'
+    remote_src: true
+  when: not fichero_config.stat.exists
+
+
+- name: Modificamos la lineas con la configuracion para la conexion con la db
+  ansible.builtin.lineinfile:
+    path: /var/www/html/wordpress/wp-config.php
+    line: "{{ item.line }}"
+    search_string: "{{ item.search_string }}"
+    state: present
+  with_items:
+    - {
+        line: "define( 'DB_NAME', '{{ db_name }}' );",
+        search_string: "define( 'DB_NAME', 'database_name_here' );"
+    }
+    - {
+        line: "define( 'DB_USER', '{{ db_user }}' );",
+        search_string: "define( 'DB_USER', 'username_here' );"
+    }
+    - {
+        line: "define( 'DB_PASSWORD', '{{ db_password }}' );",
+        search_string: "define( 'DB_PASSWORD', 'password_here' );"      
+    }    
+
+...
