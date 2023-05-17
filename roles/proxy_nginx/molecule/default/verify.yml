@@ -5,6 +5,30 @@
   hosts: all
   gather_facts: false
   tasks:
-  - name: Example assertion
-    ansible.builtin.assert:
-      that: true
+    - name: Iniciar servicio 
+      ansible.builtin.service:
+        name: nginx
+        state: started
+      register: nginx
+  
+
+    - name: Comprobar servicio
+      ansible.builtin.assert:
+        that: not nginx.changed
+        success_msg: "nginx corriendo"
+        fail_msg: "error con serivcio nginx"
+
+
+    - name: Comprobar conexion a pagina de wordpress
+      ansible.builtin.uri:
+        url: http://localhost/wordpress/
+      register: pagina_wordpress
+
+
+    - name: Comprobar codigo http
+      ansible.builtin.assert:
+        that: pagina_wordpress.status == 200
+        success_msg: "Conexion correcta a pagina de wordpress"
+        fail_msg: "Conexion incorrecta ({{ pagina_wordpress.status }})"
+
+...
