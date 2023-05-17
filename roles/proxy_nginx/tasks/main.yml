@@ -1,0 +1,26 @@
+---
+
+- name: Instalar nginx
+  ansible.builtin.package:
+    name: nginx
+    state: present
+    update_cache: true
+
+
+- name: Copiar fichero conf de nginx
+  ansible.builtin.copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reiniciar nginx
+
+
+- name: Iniciar servicio
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+
+...
