@@ -1,0 +1,33 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Stat de la carpeta /var/www/wordpress
+      stat:
+        path: /var/www/html/wordpress
+      register: wordpress
+
+
+    - name: Comprobar que existe la carpeta /var/www/wordpress
+      assert:
+        that: wordpress.stat.exists == true
+        success_msg: "Wordpress instalado"
+        fail_msg: "Wordpress NO estainstalado"
+
+
+    - name: Comprobar conexion a pagina de wordpress
+      ansible.builtin.uri:
+        url: http://localhost:8080/wordpress
+      register: pagina
+
+
+    - name: Comprobar codigo http
+      assert:
+        that: pagina.status == 200
+        success_msg: "Wordpress funcionando correctamente"
+        fail_msg: "Wordpres no esta funcionando correctamente"
+
+...

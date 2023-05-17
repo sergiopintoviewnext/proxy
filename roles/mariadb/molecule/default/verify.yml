@@ -1,0 +1,48 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  vars_files:
+    - main.yml
+    - vault.yml
+  tasks:
+    - name: Iniciar servicio 
+      ansible.builtin.service:
+        name: mariadb
+        state: started
+      register: mariadb
+  
+
+    - name: Comprobar servicio
+      ansible.builtin.assert:
+        that: not mariadb.changed
+        success_msg: "mariadb corriendo"
+        fail_msg: "mariadb no esta corriendo"
+
+
+    - name: Comprobar version mariadb
+      ansible.builtin.command:
+        cmd: "mysql --version"
+      register: version
+
+
+    - name: Assert version
+      ansible.builtin.assert:
+        that: '"10.10" in version.stdout'
+        success_msg: "Version correcta ({{ version.stdout[24:31] }})"
+        fail_msg: "Version incorrecta de mariadb"
+
+
+    - name: Comprobar conexion con usuario {{ db_user }} a db {{ db_name }}
+      ansible.builtin.command:
+        cmd: "mysql -u {{ db_user }} -D {{ db_name }} -p{{ db_password }}"
+      register: comando_mysql
+  
+
+    - name: Assert comando_mysql
+      ansible.builtin.assert:
+        that: comando_mysql.rc == 0
+        success_msg: "Conexion a db '{{ db_name }}' con usuario '{{ db_user }}' establecida correctamente"
+        fail_msg: "ERROR al establecer la conexion a db '{{ db_name }}' con el usuario '{{ db_user }}'"

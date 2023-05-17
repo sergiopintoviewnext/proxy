@@ -1,0 +1,61 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: true
+  vars_files:
+    - main.yml
+  tasks:
+    - name: Iniciar servicio 
+      ansible.builtin.service:
+        name: "{{ servicio }}"
+        state: started
+      register: apache
+  
+
+    - name: Comprobar servicio
+      ansible.builtin.assert:
+        that: not apache.changed
+        success_msg: "{{ servicio }} corriendo"
+        fail_msg: "{{ servicio }} no esta corriendo"
+
+
+    - name: crear fichero en /var/www/html/
+      ansible.builtin.copy:
+        dest: /var/www/html/prueba.html
+        content: "Fichero prueba para verify ansible"
+
+
+    - name: Comprobar conexion a pagina de apache
+      ansible.builtin.uri:
+        url: http://localhost:8080/prueba.html
+      register: pagina
+
+
+    - name: Comprobar codigo http
+      ansible.builtin.assert:
+        that: pagina.status == 200
+        success_msg: "{{ servicio }} funcionando correctamente"
+        fail_msg: "{{ servicio }} no esta funcionando correctamente"
+
+
+    - name: Eliminar fichero prueba.html
+      ansible.builtin.file:
+        path: /var/www/html/prueba.html
+        state: absent
+        
+
+    - name: Ejecutar comando para ver version php
+      ansible.builtin.command:
+        cmd: php --version
+      register: php
+
+
+    - name: Comprobar que se esta corriendo PHP
+      ansible.builtin.assert:
+        that: php.rc == 0
+        success_msg: "PHP instalado con version {{ php.stdout[4:10]}}"
+        fail_msg: "PHP NO esta instalado o no tiene la version correcta {{ php.stdout[4:10]}}"
+
+...

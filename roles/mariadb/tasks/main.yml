@@ -1,0 +1,62 @@
+---
+
+- name: Incluir fichero vault.yml
+  ansible.builtin.include_vars:
+    file: vault.yml
+
+
+- name: Instalar curl
+  ansible.builtin.package:
+    name: curl
+    state: present
+    update_cache: true
+
+
+- name: Instalar repo Mariadb
+  ansible.builtin.command:
+    cmd: "{{ item }}"
+  with_items:
+    - curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
+    - bash mariadb_repo_setup --mariadb-server-version=10.10
+  changed_when: false
+
+
+- name: Instalar mariadb-server y pip
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  with_items:
+    - mariadb-server
+    - python3-pip
+
+
+- name: Instalar PyMySQL
+  ansible.builtin.pip:
+    name: PyMySQL
+    state: present
+
+
+- name: Levantar servicio mariadb
+  ansible.builtin.service:
+    name: mariadb
+    state: started
+    enabled: true
+
+
+- name: Crear db para wordpress
+  community.mysql.mysql_db:
+    name: "{{ db_name }}"
+    state: present
+    login_unix_socket: "{{ login_socket }}"
+
+
+- name: Crear usuario para db wordpress
+  community.mysql.mysql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: "{{ db_name }}.*:ALL,GRANT"    
+    state: present
+    login_unix_socket: "{{ login_socket }}"
+  
+...

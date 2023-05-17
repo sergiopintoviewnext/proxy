@@ -1,0 +1,14 @@
+---
+
+# Credenciales para la conexion de wordpress con postgresql
+db_name: wordpress
+db_user: wordpress
+
+
+# Version de wordpress
+version_wordpress: https://es.wordpress.org/latest-es_ES.tar.gz
+
+
+grupo_apache: apache
+
+...
