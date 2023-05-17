@@ -52,7 +52,7 @@
       register: php
 
 
-    - name: Comprobar que se esta corriendo la version correcta de PHP
+    - name: Comprobar que se esta corriendo PHP
       ansible.builtin.assert:
         that: php.rc == 0
         success_msg: "PHP instalado con version {{ php.stdout[4:10]}}"

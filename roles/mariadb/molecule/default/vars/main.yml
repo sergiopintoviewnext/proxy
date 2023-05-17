@@ -1,0 +1,9 @@
+---
+
+db_name: wordpress
+db_user: wordpress
+
+
+login_socket: /var/lib/mysql/mysql.sock
+
+...
