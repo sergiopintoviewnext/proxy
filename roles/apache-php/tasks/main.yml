@@ -1,0 +1,23 @@
+---
+
+- name: Instalar apache y php
+  ansible.builtin.package:
+    name: "{{ paquetes }}"
+    state: present
+    update_cache: true
+
+
+- name: Configuracion apache para escuchar por puerto 8080
+  ansible.builtin.lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: 'Listen 80'
+    line: Listen 8080
+
+
+- name: Iniciar servicio
+  ansible.builtin.service:
+    name: "{{ servicio }}"
+    state: started
+    enabled: true
+
+...
