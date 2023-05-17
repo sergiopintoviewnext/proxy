@@ -5,7 +5,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: ubi8
+  - name: ubi8_2
     image: registry.access.redhat.com/ubi8/ubi-init
     tmpfs:
       - /run

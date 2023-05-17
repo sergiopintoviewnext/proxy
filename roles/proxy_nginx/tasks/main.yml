@@ -16,6 +16,15 @@
     mode: '0644'
   notify: Reiniciar nginx
 
+- name: Copiar fichero conf de nginx
+  ansible.builtin.copy:
+    src: proxy.conf
+    dest: /etc/nginx/conf.d/proxy.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reiniciar nginx  
+
 
 - name: Iniciar servicio
   ansible.builtin.service:
