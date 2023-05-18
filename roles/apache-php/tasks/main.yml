@@ -21,4 +21,12 @@
     state: started
     enabled: true
 
+
+- name: Permitir conexiones http
+  ansible.posix.firewalld:
+    service: http
+    state: enabled
+    permanent: true
+    immediate: true
+
 ...
