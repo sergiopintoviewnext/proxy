@@ -22,7 +22,7 @@
     enabled: true
 
 
-- name: Permitir conexiones http
+- name: Permitir conexiones por puerto 8080
   ansible.posix.firewalld:
     port: 8080/tcp
     state: enabled
