@@ -24,7 +24,7 @@
 
 - name: Permitir conexiones http
   ansible.posix.firewalld:
-    service: http
+    port: 8080/tcp
     state: enabled
     permanent: true
     immediate: true
