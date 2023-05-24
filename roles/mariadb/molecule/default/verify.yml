@@ -25,14 +25,14 @@
     - name: Comprobar version mariadb
       ansible.builtin.command:
         cmd: "mysql --version"
-      register: version
+      register: version_mariadb
 
 
     - name: Assert version
       ansible.builtin.assert:
-        that: '"10.10" in version.stdout'
-        success_msg: "Version correcta ({{ version.stdout[24:31] }})"
-        fail_msg: "Version incorrecta de mariadb"
+        that: '"{{ version }}" in version_mariadb.stdout'
+        success_msg: "Version correcta ({{ version_mariadb.stdout[24:31] }})"
+        fail_msg: "Version incorrecta de mariadb ({{ version_mariadb.stdout[24:31] }})s"
 
 
     - name: Comprobar conexion con usuario {{ db_user }} a db {{ db_name }}
