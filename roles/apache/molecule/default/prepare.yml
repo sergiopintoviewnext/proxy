@@ -5,6 +5,7 @@
   gather_facts: true
   tasks:
       - name: Preparando contenedor ubi8
+        when: ansible_os_family == "RedHat"
         block:
         - name: Añadir repo BaseOS
           ansible.builtin.yum_repository:
@@ -26,7 +27,6 @@
           ansible.builtin.service:
             name: firewalld
             state: started
-            enabled: true
-        when: ansible_os_family == "RedHat"      
+            enabled: true      
 
 ...

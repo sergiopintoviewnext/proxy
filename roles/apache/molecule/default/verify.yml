@@ -11,12 +11,12 @@
       ansible.builtin.service:
         name: "{{ servicio }}"
         state: started
-      register: apache
+      register: status
   
 
     - name: Comprobar servicio
       ansible.builtin.assert:
-        that: not apache.changed
+        that: not status.changed
         success_msg: "{{ servicio }} corriendo"
         fail_msg: "{{ servicio }} no esta corriendo"
 
@@ -43,19 +43,6 @@
     - name: Eliminar fichero prueba.html
       ansible.builtin.file:
         path: /var/www/html/prueba.html
-        state: absent
-        
-
-    - name: Ejecutar comando para ver version php
-      ansible.builtin.command:
-        cmd: php --version
-      register: php
-
-
-    - name: Comprobar que se esta corriendo PHP
-      ansible.builtin.assert:
-        that: php.rc == 0
-        success_msg: "PHP instalado con version {{ php.stdout[4:10]}}"
-        fail_msg: "PHP NO esta instalado o no tiene la version correcta {{ php.stdout[4:10]}}"
+        state: absent        
 
 ...

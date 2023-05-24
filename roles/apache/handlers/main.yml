@@ -1,6 +1,6 @@
 ---
 
-- name: Reiniciar httpd
+- name: Reiniciar httpd/apache2
   ansible.builtin.service:
     name: "{{ servicio }}"
     state: restarted

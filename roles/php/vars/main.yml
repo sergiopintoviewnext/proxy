@@ -1,0 +1,34 @@
+---
+
+version: 8.2
+
+
+paquetes: '{% if ansible_os_family=="RedHat" %}{{ paquetes_redhat }}{% else %}{{ paquetes_debian }}{% endif %}'
+
+
+paquetes_debian:
+  - php{{ version }}
+  - libapache2-mod-php
+  - php-gd
+  - php-mysql
+  - php-curl
+  - php-mbstring
+  - php-intl
+  - php-gmp
+  - php-bcmath
+  - php-xml
+  - php-imagick
+  - php-zip
+
+paquetes_redhat:
+  - php
+  - php-gd
+  - php-mbstring
+  - php-intl
+  - php-pecl-apcu
+  - php-mysqlnd
+  - php-opcache
+  - php-json
+  - php-zip
+
+...

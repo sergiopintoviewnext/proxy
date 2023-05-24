@@ -1,0 +1,23 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: true
+  vars_files:
+    - main.yml
+  tasks:
+    - name: Ejecutar comando para ver version php
+      ansible.builtin.command:
+        cmd: php --version
+      register: php
+
+
+    - name: Comprobar que se esta corriendo la version correcta de PHP
+      ansible.builtin.assert:
+        that: '"PHP {{ version }}" in php.stdout'
+        success_msg: "PHP instalado con version {{ php.stdout[4:10]}}"
+        fail_msg: "PHP NO esta instalado o no tiene la version correcta {{ php.stdout[4:10]}}"
+
+
+...

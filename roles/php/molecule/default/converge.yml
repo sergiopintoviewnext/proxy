@@ -3,8 +3,8 @@
 - name: Converge
   hosts: all
   tasks:
-    - name: "Include apache-php"
+    - name: "Include php"
       include_role:
-        name: "apache-php"
+        name: "php"
 
 ...

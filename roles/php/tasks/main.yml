@@ -1,0 +1,52 @@
+---
+
+- name: Añadir repo Epel y Remi en Rhel
+  when: ansible_os_family == "RedHat"
+  block:
+  - name: Añadir repo Epel y Remi en Rhel
+    ansible.builtin.yum:
+      name: "{{ item }}"
+      state: present
+      disable_gpg_check: true
+    with_items:
+      - "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+      - "https://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm"
+
+  - name: Habilitar modulo php
+    ansible.builtin.command:
+      cmd: "{{ item }}"
+    with_items:
+      - yum module reset -y php
+      - "yum module enable -y php:remi-{{ version }}"
+    changed_when: false
+
+
+- name: Añadir repo Sury en Debian
+  when: ansible_os_family == "Debian"
+  block:
+  - name: Instalar gnupg
+    ansible.builtin.apt:
+      name: gnupg
+      state: present
+      update_cache: true
+
+  - name: Agregar clave GPG de Sury Debian
+    ansible.builtin.apt_key:
+      url: https://packages.sury.org/php/apt.gpg
+      state: present
+
+  - name: Añadir repositorio Sury Debian
+    ansible.builtin.apt_repository:
+      repo: deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main
+      state: present
+      
+
+
+- name: Instalar paquetes
+  ansible.builtin.package:
+    name: "{{ paquetes }}"
+    state: present
+    update_cache: true
+
+
+...

@@ -1,0 +1,11 @@
+---
+
+servicio: '{% if ansible_os_family == "RedHat" %}httpd{% else %}apache2{% endif %}'
+
+
+paquetes: '{% if ansible_os_family == "RedHat" %}httpd{% else %}apache2{% endif %}'
+
+
+path_ports: '{% if ansible_os_family == "RedHat" %}/etc/httpd/conf/httpd.conf{% else %}/etc/apache2/ports.conf{% endif %}'
+
+...
