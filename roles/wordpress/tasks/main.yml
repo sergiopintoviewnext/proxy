@@ -7,7 +7,7 @@
 
 - name: Descargar, descomprimir Wordpress
   ansible.builtin.unarchive:
-    src: "{{ version_wordpress }}"
+    src: "https://es.wordpress.org/{{ version_wordpress }}-es_ES.tar.gz"
     dest: /var/www/html/
     remote_src: true
     mode: '0775'

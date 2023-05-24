@@ -6,7 +6,7 @@ db_user: wordpress
 
 
 # Version de wordpress
-version_wordpress: https://es.wordpress.org/latest-es_ES.tar.gz
+version_wordpress: latest  # wordpress-5.1.6
 
 
 grupo_apache: apache

@@ -31,4 +31,7 @@ paquetes_redhat:
   - php-json
   - php-zip
 
+
+servicio: '{% if ansible_os_family == "RedHat" %}httpd{% else %}apache2{% endif %}'  
+
 ...
