@@ -3,7 +3,7 @@
 version: 8.2
 
 
-paquetes: '{% if ansible_os_family=="RedHat" %}{{ paquetes_redhat }}{% else %}{{ paquetes_debian }}{% endif %}'
+paquetes: '{% if ansible_os_family == "RedHat" %}{{ paquetes_redhat }}{% else %}{{ paquetes_debian }}{% endif %}'
 
 
 paquetes_debian:
